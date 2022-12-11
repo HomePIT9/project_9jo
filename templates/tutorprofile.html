@@ -80,21 +80,23 @@
             justify-content: center;
         }
 
-        .col-md-4 {
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
+        .aaa > div.col-md-6 {
+            margin-top: 10px;
+        }
+        .aaa > div.col-md-4 {
+            margin-top: 10px;
 
-            margin-top: 20px;
         }
-        .form-label {
-            margin-right: 20px;
+        .form-select {
+            margin-top: 10px;
+
         }
+
 
         .uploadImg {
-            margin: 10px;
+
             margin-top: 20px;
+
         }
 
         img#previewImg {
@@ -288,18 +290,12 @@
         <h1>강사 프로필 등록</h1>
     </div>
     <div class="aaa">
+<!--        <div class="row-box">-->
 
             <table class="info_box">
-                <div class="uploadImg">
-                    <div class="filebox">
-                        <input class="upload-name" value="선택된 파일 없음" disabled="disabled">
-                        <input type="file" id="file1" class="upload-hidden" name="file1">
-                        <label for="file1">이미지 첨부</label>
-                    </div>
-                    <img id="previewImg" onclick="popImage(this.src)">
-                </div>
+
                 <tr>
-                    <form class="row g-3">
+                <form class="row g-3">
                         <div class="col-md-6">
                             <label for="tutorname" class="form-label">이름</label>
                             <input type="email" class="form-control" id="tutorname" placeholder="name">
@@ -314,8 +310,8 @@
                             <textarea class="form-control" id="career" rows="3" placeholder="career"></textarea>
 
                         </div>
-                        <div class="col-md-4">
-                            <label for="inputState" class="form-label">State</label>
+                        <div class="col-md-4" style="width: 418.5px">
+                            <label for="inputState" class="form_type">운동종류</label>
                             <select id="inputState" class="form-select">
                                 <option selected>Choose...</option>
                                 <option>PT 강사</option>
@@ -331,6 +327,14 @@
                         </div>
                     </form>
                 </tr>
+                <div class="uploadImg">
+                    <img id="previewImg" onclick="popImage(this.src)">
+                    <div class="filebox">
+                        <input class="upload-name" value="선택된 파일 없음" disabled="disabled">
+                        <input type="file" id="file1" class="upload-hidden" name="file1">
+                        <label for="file1">이미지 첨부</label>
+                    </div>
+                </div>
 
             </table>
 
