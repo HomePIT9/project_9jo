@@ -83,7 +83,7 @@ def api_valid():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         userinfo = db.save_info.find_one({'new_id': payload['id']}, {'_id': 0})
 
-        return jsonify({'result': 'success', 'nickname': userinfo['name']})
+        return jsonify({'result': 'success', 'name': userinfo['name']})
 
     except jwt.ExpiredSignatureError:
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
