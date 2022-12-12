@@ -16,7 +16,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <title>오운완</title>
+    <title>💪홈핏 | Home Pit</title>
     <style>
         .set {
             width: 180px;
@@ -32,8 +32,10 @@
 
             font-size: 24px;
             text-align: center;
+        }
 
-            cursor: pointer;
+        input::placeholder {
+            color: white;
         }
 
         .btn {
@@ -91,7 +93,6 @@
     </style>
     <script>
         $(document).ready(function () {
-            alert('새로고침됨')
             $('#card_list').hide()
         });
 
@@ -136,65 +137,76 @@
         function reservation() {
             window.location.replace('tutors/reservation')
         }
+
+        function sample() {
+            let url = $('#url2').val()
+            let name = $('#name2').val()
+            let type = $('#type2').val()
+            let location = $('#location2').val()
+            let id = $('#id2').val()
+            let pw = $('#pw2').val()
+            let career = $('#career2').val()
+            let qualification = $('#qualification2').val()
+
+            $.ajax({
+                type: "POST",
+                url: "/sample/go",
+                data: {
+                    url_give: url,
+                    name_give: name,
+                    type_give: type,
+                    location_give: location,
+                    id_give: id,
+                    pw_give: pw,
+                    career_give: career,
+                    qualification_give: qualification
+                },
+                success: function (response) {
+                    alert('msg')
+                }
+            })
+        }
     </script>
 </head>
 
 <body class="main-body">
 
 <nav class="navbar navbar-expand-lg navbar-dark  top-menu">
-        <a class="navbar-brand homefit" href="/">HomeFit</a>
+    <a class="navbar-brand homefit" href="/">HomeFit</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 
-          <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-              <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
+                <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  nav-right" href="advise">상담하기</a>
+                <a class="nav-link  nav-right" href="advise">상담하기</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-right" href="">로그아웃</a>
+                <a class="nav-link nav-right" href="">로그아웃</a>
             </li>
-          </ul>
-        </div>
-    </nav>
+        </ul>
+    </div>
+</nav>
 
 <div class="btn">
     <div>
-        <select class="set" id="type">
+        <select class="set" id="type" style="cursor: pointer">
             <option selected>운동</option>
-            <option value='체조'>체조</option>
-            <option value='댄스'>댄스</option>
-            <option value='피트니스'>피트니스</option>
-            <option value='이두'>이두</option>
-            <option value='복싱'>복싱</option>
-            <option value='하체'>하체</option>
+            <option value='피트니스 강사'>피트니스 강사</option>
+            <option value='요가 강사'>요가 강사</option>
+            <option value='필라테스 강사'>필라테스 강사</option>
+            <option value='재활치료사'>재활치료사</option>
+            <option value='기타'>기타</option>
         </select>
     </div>
     <div>
-        <select class="set" id="location">
-            <option selected>지역</option>
-            <option value='서울'>서울</option>
-            <option value='부산'>부산</option>
-            <option value='대구'>대구</option>
-            <option value='인천'>인천</option>
-            <option value='광주'>광주</option>
-            <option value='대전'>대전</option>
-            <option value='세종'>세종</option>
-            <option value='경기도'>경기도</option>
-            <option value='강원도'>강원도</option>
-            <option value='충청북도'>충청북도</option>
-            <option value='충청남도'>충청남도</option>
-            <option value='전라북도'>전라북도</option>
-            <option value='전라남도'>전라남도</option>
-            <option value='경상북도'>경상북도</option>
-            <option value='경상남도'>경상남도</option>
-            <option value='제주도'>제주도</option>
-        </select>
+        <input class="set" placeholder="지역" id="location">
     </div>
     <button class="set" onclick="show_tutor()">조회</button>
 </div>
@@ -203,7 +215,6 @@
     <div class="row row-cols-1 row-cols-md-6 g-4" id="card_list">
     </div>
 </div>
-
 
 </body>
 

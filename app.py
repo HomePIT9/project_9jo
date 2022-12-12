@@ -39,10 +39,10 @@ def tutors_post():
     type_receive = request.form['type_give']
     location_receive = request.form['location_give']
 
-    if type_receive == '운동' and location_receive == '지역':
-        tutor_list = list(db.tutors.find({}, {'_id': False}))
+    if type_receive == '운동' and location_receive == '':
+        tutor_list = list(db.members.find({}, {'_id': False}))
     else:
-        tutor_list = list(db.tutors.find({'type': type_receive, 'location': location_receive}, {'_id': False}))
+        tutor_list = list(db.members.find({'type': type_receive, 'location': location_receive}, {'_id': False}))
 
     return jsonify({'tutor': tutor_list})
 
@@ -50,55 +50,9 @@ def tutors_post():
 def tutor_name():
     num_receive = int(request.form['num_give'])
 
-    tutor = list(db.tutors.find({'num':num_receive},{'_id':False}))
+    tutor = list(db.members.find({'num':num_receive},{'_id':False}))
 
     return jsonify({'tutor': tutor})
-
-@app.route("/sample/add", methods=["POST"])
-def sample_post():
-    url_receive = request.form['url_give']
-    name_receive = request.form['name_give']
-    type_receive = request.form['type_give']
-    location_receive = request.form['location_give']
-    id_receive = request.form['id_give']
-    password_receive = request.form['password_give']
-    career_receive = request.form['career_give']
-    qualification_receive = request.form['qualification_give']
-
-    num = len(list(db.tutors.find({},{'_id':False}))) + 1
-
-    doc = {
-        'img': url_receive,
-        'name': name_receive,
-        'type': type_receive,
-        'location': location_receive,
-        'id': id_receive,
-        'password': password_receive,
-        'career': career_receive,
-        'qualification': qualification_receive,
-        'num': num
-    }
-
-    db.tutors.insert_one(doc)
-
-    return jsonify({'msg': '저장 성공'})
-
-@app.route("/reviewSample/add", methods=["POST"])
-def reviewsample_post():
-    tutor_receive = request.form['tutor_give']
-    member_receive = request.form['member_give']
-    content_receive = request.form['content_give']
-
-    doc = {
-        'tutor': tutor_receive,
-        'member': member_receive,
-        'content': content_receive,
-        'num': 1
-    }
-
-    db.reviews.insert_one(doc)
-
-    return jsonify({'msg': '저장 성공'})
 
 @app.route("/reviewTutor", methods=["POST"])
 def reviewTutor():
@@ -110,26 +64,12 @@ def reviewTutor():
 
 @app.route("/advise/save", methods=["POST"])
 def advise_save():
-    cnt_receive = int(request.form['cnt_give'])  #cnt는 새로작성이 아닌 수정한 것 update해야됨
     title_receive = request.form['title_give']
     comment_receive = request.form['comment_give']
     private_receive = int(request.form['private_give'])
     member_receive = '테스트2'
     member_id = 'test1234'
-
     #member 이름과 아이디는 현재 접속중인 사람의 것을 넣음
-
-    if cnt_receive:
-        num = int(request.cookies['comment_num'])
-
-        db.advise.update_one({'num': num}, {'$set': {'title': title_receive}})
-        db.advise.update_one({'num': num}, {'$set': {'comment': comment_receive}})
-        db.advise.update_one({'num': num}, {'$set': {'private': private_receive}})
-
-        return jsonify({'msg': '상담이 완료 되었습니다!'})
-
-
-
     temp = list(db.advise.find({}, {'_id': False}))
     num = 0
 
@@ -193,11 +133,16 @@ def adviceDelete():
 
 @app.route("/advice/modify", methods=["POST"])
 def adviceModify():
-    num_receive = int(request.form['num_give'])
+    num_receive = int(request.cookies['comment_num'])
+    title_receive = request.form['title_give']
+    comment_receive = request.form['comment_give']
+    private_receive = int(request.form['private_give'])
 
-    advice = list(db.advise.find({'num': num_receive},{'_id':False}))
+    db.advise.update_one({'num':num_receive},{'$set':{'title': title_receive}})
+    db.advise.update_one({'num': num_receive}, {'$set': {'comment': comment_receive}})
+    db.advise.update_one({'num': num_receive}, {'$set': {'private': private_receive}})
 
-    return jsonify({'advice': advice})
+    return jsonify({'msg': '상담이 완료 되었습니다!'})
 
 @app.route('/')
 def home():

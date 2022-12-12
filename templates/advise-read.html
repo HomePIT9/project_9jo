@@ -16,12 +16,13 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <title>스파르타코딩클럽 | 부트스트랩 연습하기</title>
+    <title>💪홈핏 | 상담 읽기</title>
     <script>
         $(document).ready(function () {
             show_comment();
             $('#modify').hide();
             $('#delete').hide();
+            $('#advice_form2').hide();
         });
 
         function show_comment() {
@@ -37,6 +38,8 @@
 
                     $('#title').text(title);
                     $('#comment').text(comment);
+                    $('#title2').val(title);
+                    $('#comment2').text(comment);
 
                     if (id == 'test1234') {      //현재 사용자의 아이디와 비교
                         $('#modify').show();
@@ -59,35 +62,92 @@
                 success: function (response) {
                     alert(response['msg'])
                     $.removeCookie('comment_num')
+                    window.opener.location.reload();
                     window.close()
                 }
             })
         }
 
         function advice_modify() {
-            $.cookie('comment_ck', 1)
-            window.open('write', 'write', 'width = 600px, height= 550px, top= 300px, left= 600px')
+            $('#advice_form1').hide();
+            $('#advice_form2').show();
+        }
+
+        function advice_save() {
+            let title = $('#title2').val()
+            let comment = $('#comment2').val()
+            if(title == '') {
+                return alert('제목이 비어있습니다!')
+            }
+            if(comment == '') {
+                return alert('내용이 비어있습니다!')
+            }
+            let private = 1
+            if($('#on_off').text() == '공개') {
+                private = 0
+            }
+            $.ajax({
+                type: "POST",
+                url: "/advice/modify",
+                data: {title_give: title, comment_give: comment, private_give: private},
+                success: function (response) {
+                    alert(response['msg'])
+                    window.opener.location.reload();
+                    window.close()
+                }
+            })
+        }
+
+        function on_off() {
+            if($('#on_off').text() == '공개') {
+                $('#on_off').text('비공개')
+            } else {
+                $('#on_off').text('공개')
+            }
         }
     </script>
 </head>
 
 <body class="advice-body">
 <a class="navbar-brand homefit" style="color: white; cursor: pointer" onclick="window.close()">HomeFit</a>
-<h1 style="font-size: 28px; text-align: center; color: white">상담 글 보기</h1>
 
-<div class="advice_form">
-    <div class="advice_title">
-        <span id="title"></span>
+<div class="advice_form1" id="advice_form1">
+    <h1 style="font-size: 28px; text-align: center; color: white">상담 글 보기</h1>
+    <div class="advice_form">
+        <div class="advice_title">
+            <span id="title"></span>
+        </div>
+        <div class="advice_comment">
+            <span id="comment"></span>
+        </div>
     </div>
-    <div class="advice_comment">
-        <span id="comment"></span>
+    <div class="advice-btn">
+        <button style="background-color: #BA94D1" onclick="advice_modify()" id="modify">수정</button>
+        <button style="background-color: brown" onclick="advice_delete()" id="delete">삭제</button>
+        <button style="background-color: gray" onclick="advice_close()">닫기</button>
     </div>
 </div>
-<div class="advice-btn">
-    <button style="background-color: #BA94D1" onclick="advice_modify()" id="modify">수정</button>
-    <button style="background-color: brown" onclick="advice_delete()" id="delete">삭제</button>
-    <button style="background-color: gray" onclick="advice_close()">닫기</button>
+
+<div class="advice_form2" id="advice_form2">
+    <h1 style="font-size: 28px; text-align: center; color: white">상담 글 쓰기</h1>
+    <div class="form-check form-switch" style="position: absolute; left: 85%; top: 80px">
+        <input onclick="on_off()" class="form-check-input" type="checkbox" id="private_check" checked>
+        <label class="form-check-label" for="private_check" style="color: white"><span id="on_off">공개</span></label>
+    </div>
+    <div class="form-floating mb-3" style="width: 90%; left: 5%">
+        <input class="form-control" id="title2" placeholder="제목">
+        <label for="title">제목</label>
+    </div>
+    <div class="form-floating" style="width: 90%; left: 5%">
+        <textarea class="form-control" placeholder="내용" id="comment2" style="height: 300px"></textarea>
+        <label for="comment">내용</label>
+    </div>
+    <div class="advice-btn">
+        <button style="background-color: cadetblue" onclick="advice_save()">완료</button>
+        <button style="background-color: gray" onclick="advice_close()">닫기</button>
+    </div>
 </div>
+
 </body>
 
 </html>
