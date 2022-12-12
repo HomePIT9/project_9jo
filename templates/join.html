@@ -408,16 +408,47 @@
       }
     }
     //-------------------------------------------------------
-    function save_info() {
+    function save_info() { //혜민님 이 함수 부분만 보시면 될 것 같아요
+      let new_id = $('#new_id').val()
+      if (new_id === ''){
+        alert("아이디를 입력하세요.")
+        return false
+      }
+
       let new_pw = $('#new_pw').val()
+      if (pw_check() === false){
+        alert("비밀번호를 다시 입력하세요.")
+        return false
+      }
 
       let name = $('#name').val()
-      let new_id = $('#new_id').val()
+      if (name === ''){
+        alert("이름을 입력하세요.")
+        return false
+      }
+
       let location = $('#location').val()
+      if (location === ''){
+        alert("지역을 입력하세요.")
+        return false
+      }
       let choice = select
 
       let qualification = $('#qualification').val()
       let career = $('#career').val()
+
+      if (select === 0) {
+        if (qualification === '') {
+          alert("자격증을 입력하세요.")
+          return false
+        }
+
+        if (career === '') {
+          alert("경력을 입력하세요.")
+          return false
+        }
+      }
+
       let img = $('#chooseFile').val()
       let type = $('#inputState option:selected').val()
 
