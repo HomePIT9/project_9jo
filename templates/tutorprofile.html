@@ -31,6 +31,12 @@
 
         }
 
+        .jbMenu {
+            background-color: #1D1E23;
+            width: 100%;
+            position: fixed;
+        }
+
 
         .line_bar {
 
@@ -43,7 +49,7 @@
         .mypic_tp {
             width: 100%;
             height: 100%;
-            min-height: 200px;
+            min-height: 300px;
 
             background-image: linear-gradient(0deg, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://cdn.pixabay.com/photo/2014/04/24/17/56/fitness-studio-331569_1280.jpg');
             background-position: 0px -380px;
@@ -64,7 +70,6 @@
         }
 
 
-
         .click {
             margin-top: 20px;
             display: flex;
@@ -74,13 +79,15 @@
             margin: 10px;
 
         }
-        button + button{
+
+        button + button {
             margin-left: 10px;
         }
 
 
         .aaa {
             margin: 20px;
+            margin-top: 60px;
 
 
             display: flex;
@@ -88,8 +95,9 @@
             align-items: stretch;
             justify-content: center;
         }
+
         .info_box {
-            height: 800px;
+            height: 550px;
             width: 400px;
 
             display: flex;
@@ -98,24 +106,27 @@
             align-content: center;
 
         }
+
         .a_col-md-12 {
             display: flex;
             flex-direction: row;
-
+            align-items: center;
         }
-        .form_es_type{
+
+        .form_es_type {
             margin-right: 37px;
 
 
         }
-        .form-select{
+
+        .form-select {
             width: 300px;
 
         }
 
 
         .uploadImg {
-            height: 800px;
+            height: 550px;
             width: 400px;
 
             display: flex;
@@ -140,10 +151,10 @@
 
 
         }
-        .img_text{
+
+        .img_text {
             position: relative;
-				top: -250px;
-                rightt: 20px
+            top: -260px;
         }
 
         .filebox {
@@ -200,116 +211,73 @@
     </style>
     <script>
 
-        function uploading_files() {
-            let file = files[0]; //실제 파일
-            let image = files[0].name; //파일명
-            let desc = $('#input_feed_content').val(); //이미지 밑에 쓴 글
-            console.log(image)
-            let formData = new FormData();
-            formData.append('file_give', file)
-            formData.append('image_give', image)
-            formData.append('desc_give', desc)
+        function save_btn() {
+            let tutorname = $('#tutorname').val()
+            let qualifications = $('#qualifications').val()
+            let career = $('#career').val()
+            let inputstate = $('#inputstate').val()
+
             $.ajax({
                 type: 'POST',
                 url: '/profile',
-                processData: false,
-                contentType: false,
-                data: formData,
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        alert(response['msg'])
-                        window.location.href = '/'
-                    } else {
-                        alert(response['msg'])
-                        window.location.reload()
-                    }
+                data: {
+                    tutorname_give: tutorname,
+                    qualifications_give: qualifications,
+                    career_give: career,
+                    inputstate_give: inputstate
                 },
-                error: function (err) {
-                    console.log('error:' + err)
+                success: function (response) {
+                    alert(response['msg'])
+                    history.back();
                 }
             });
         }
-
 
         $(document).ready(function () {
-            //파일첨부 이벤트
-            $('.filebox .upload-hidden').on('change', function () {
-                if (window.FileReader) {
-                    var filename = $(this)[0].files[0].name;
-                    if (!validFileType(filename)) {
-                        alert("허용하지 않는 확장자 파일입니다.");
-                        return false;
-                    } else {
-                        if (!validFileSize($(this)[0].files[0])) {
-                            alert("파일 사이즈가 10MB를 초과합니다.");
-                            return false;
-                        } else {
-                            if (!validFileNameSize(filename)) {
-                                alert("파일명이 30자를 초과합니다.");
-                                return false;
-                            }
-                        }
-                    }
+            var jbOffset = $('.jbMenu').offset();
+            $(window).scroll(function () {
+                if ($(document).scrollTop() > jbOffset.top) {
+                    $('.jbMenu').addClass('jbFixed');
                 } else {
-                    var filename = $(this).val().split('/').pop().split('\\').pop();
+                    $('.jbMenu').removeClass('jbFixed');
                 }
-                $(this).prev().val(filename); //input upload-name 에 파일명 설정해주기
-
-                readImage($(this)[0]); //미리보기
             });
         });
-
-        function validFileType(filename) {
-            const fileTypes = ["png", "jpg", "jpeg"];
-            return fileTypes.indexOf(filename.substring(filename.lastIndexOf(".") + 1, filename.length).toLowerCase()) >= 0;
-        }
-
-        function validFileSize(file) {
-            if (file.size > 10000000) { //10MB
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        function validFileNameSize(filename) {
-            if (filename.length > 30) { //30자
-                return false;
-            } else {
-                return true;
-            }
-        }
-
-        //이미지 띄우기
-        function readImage(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const previewImage = document.getElementById("previewImg");
-                    previewImage.src = e.target.result;
-                }
-                // reader가 이미지 읽도록 하기
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        //이미지 원본 팝업 띄우기
-        function popImage(url) {
-            var img = new Image();
-            img.src = url;
-            var img_width = img.width;
-            var win_width = img.width + 25;
-            var img_height = img.height;
-            var win = img.height + 30;
-            var popup = window.open('', '_blank', 'width=' + img_width + ', height=' + img_height + ', menubars=no, scrollbars=auto');
-            popup.document.write("<style>body{margin:0px;}</style><img src='" + url + "' width='" + win_width + "'>");
-        }
-
 
     </script>
 </head>
 <body>
+<div class="jbMenu">
+    <nav class="navbar navbar-expand-lg navbar-dark  top-menu">
+        <a class="navbar-brand homefit" href="/main">HomeFit</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
+                aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link  nav-right" onclick="timetables()">수업등록</a>
+
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  nav-right" href="advise">상담하기</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav-right" href="">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 <div class="mypic_tp">
+
     <table class="line_bar">
         <tr>
             <!--                <th>blank</th>-->
@@ -324,35 +292,38 @@
 
 
         <form class="row g-3">
+            <div id="input_list">
+                <div class="col-md-12">
+                    <label for="tutorname" class="form-label">강사이름</label>
+                    <input type="email" class="form-control" id="tutorname" placeholder="name">
+                </div>
+                <div class="col-md-12">
+                    <label for="qualifications" class="form-label">자격사항</label>
+                    <textarea class="form-control" id="qualifications" rows="5" placeholder="qualifications"></textarea>
 
-            <div class="col-md-12">
-                <label for="tutorname" class="form-label">이름</label>
-                <input type="email" class="form-control" id="tutorname" placeholder="name">
-            </div>
-            <div class="col-md-12">
-                <label for="qualifications" class="form-label">자격사항</label>
-                <textarea class="form-control" id="qualifications" rows="5" placeholder="qualifications"></textarea>
+                </div>
+                <div class="col-md-12">
+                    <label for="career" class="form-label">경력사항</label>
+                    <textarea class="form-control" id="career" rows="5" placeholder="career"></textarea>
+
+                </div>
+                <div class="a_col-md-12">
+                    <label for="inputstate" class="form_es_type">운동종류</label>
+                    <select id="inputstate" class="form-select" style="margin-top: 20px">
+                        <option selected>Choose...</option>
+                        <option>PT 강사</option>
+                        <option>요가강사</option>
+                        <option>필라테스강사</option>
+                        <option>재활치료사</option>
+                        <option>기타</option>
+                    </select>
+                </div>
+                <p></p>
+
 
             </div>
-            <div class="col-md-12">
-                <label for="career" class="form-label">경력사항</label>
-                <textarea class="form-control" id="career" rows="5" placeholder="career"></textarea>
-
-            </div>
-            <div class="a_col-md-12">
-                <label for="inputState" class="form_es_type" >운동종류</label>
-                <select id="inputState" class="form-select">
-                    <option selected>Choose...</option>
-                    <option>PT 강사</option>
-                    <option>요가강사</option>
-                    <option>필라테스강사</option>
-                    <option>재활치료사</option>
-                    <option>기타</option>
-                </select>
-            </div>
-            <p></p>
             <div class="click">
-                <button type="button" class="btn btn-secondary">Save changes</button>
+                <button onclick="save_btn()" type="button" class="btn btn-secondary">Save changes</button>
                 <button type="button" class="btn btn-outline-secondary">Cancel</button>
             </div>
 
