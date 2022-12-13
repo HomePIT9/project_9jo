@@ -8,8 +8,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Jua&family=Montserrat:wght@400;700;900&family=Ubuntu&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Montserrat:wght@400;700;900&family=Ubuntu&display=swap"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
 
     <!-- Bootstrap Scripts -->
@@ -20,13 +23,20 @@
     <script type="text/javascript" src="/static/js/reservation.js"></script>
     <script type="text/javascript" src="/static/js/main.js"></script>
 
+    <script>
+        function logout() {
+            $.removeCookie('memberId');
+            alert('로그아웃!')
+            window.location.href = '/'
+        }
+    </script>
 
 </head>
 <body class="reservation-body">
-    <nav class="navbar navbar-expand-lg navbar-dark  top-menu">
-        <a class="navbar-brand homefit" href="/main">HomeFit</a>
+<nav class="navbar navbar-expand-lg navbar-dark  top-menu">
+    <a class="navbar-brand homefit" href="/main">HomeFit</a>
 
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
@@ -39,7 +49,7 @@
               <a class="nav-link  nav-right" onclick="reservation_list()">예약조회</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-right" href="">로그아웃</a>
+              <a class="nav-link nav-right" href="" onclick="logout()">로그아웃</a>
             </li>
           </ul>
         </div>

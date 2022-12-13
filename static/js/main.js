@@ -55,3 +55,8 @@ function schedule() {
     }
 }
 
+function logout() {
+    alert('로그아웃!')
+    $.removeCookie('member');
+    window.location.href = '/'
+}

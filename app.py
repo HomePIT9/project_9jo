@@ -14,11 +14,11 @@ import certifi
 
 ca = certifi.where()
 
-client = MongoClient('mongodb+srv://test:sparta@cluster0.jftxkcu.mongodb.net/?retryWrites=true&w=majority',tlsCAFile=ca)
-db = client.homefit
+# client = MongoClient('mongodb+srv://test:sparta@cluster0.jftxkcu.mongodb.net/?retryWrites=true&w=majority',tlsCAFile=ca)
+# db = client.homefit
 
-# client = MongoClient('mongodb+srv://test:sparta@cluster0.qcokm6l.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
-# db = client.dbsparta
+client = MongoClient('mongodb+srv://test:sparta@cluster0.qcokm6l.mongodb.net/Cluster0?retryWrites=true&w=majority', tlsCAFile=ca)
+db = client.dbsparta
 
 SECRET_KEY = 'SPARTA'
 
@@ -88,7 +88,7 @@ def login():
 
 @app.route('/api/save', methods=['GET'])
 def api_valid():
-    token_receive = request.cookies.get('mytoken')
+    token_receive = request.cookies.get('memberId')
 
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -357,7 +357,6 @@ def reservation_confirm():
     tutor_num = request.cookies.get("tutorNum")
     member = request.cookies.get("memberId")
     tutor = db.members.find_one({'num': int(tutor_num),'choice':"0"})['new_id']
-    member = "mini"
 
     data = db.reservations.find_one({'member': member, 'date': date_receive, 'time': time_receive, 'statud': 0})
     reservation_list = list(db.reservations.find({}, {'_id': False}))

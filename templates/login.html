@@ -93,9 +93,10 @@
                 success: function (response) {
                     if (response['result'] === 'success') {
                         alert('로그인 완료!')
+                        document.cookie = "memberId" + response['member_id'];
                         window.location.href = '/main'
 
-                        $.cookie('mytoken', response['token']);
+                        $.cookie('memberId', response['token']);
 
                     } else {
                         alert(response['msg'])
