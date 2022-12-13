@@ -36,13 +36,15 @@
 
             font-size: 24px;
             text-align: center;
+        }
 
-            cursor: pointer;
+        input::placeholder {
+            color: white;
         }
 
         .btn {
             width: 60%;
-            position: fixed;
+            position: absolute;
             left: 20%;
             top: 20%;
 
@@ -95,6 +97,19 @@
     </style>
     <script>
         $(document).ready(function () {
+
+            $.ajax({
+                type: "GET",
+                url: "/getcookie",
+                data: {},
+                success: function (response) {
+                    let user = response['user'];
+                    if (user == null) {
+                        alert('로그인하세요');
+                        document.location = '/'
+                    }
+                }
+            })
             $('#card_list').hide()
         });
 
@@ -119,7 +134,7 @@
                                                     <div class="card-body">
                                                         <h5 class="card-title" style="text-align: center">${name}</h5>
                                                         <div class="set1">
-                                                            <button onclick="review('${num}')">리뷰</button>
+                                                            <button onclick="review(${num})">리뷰</button>
                                                             <button onclick="reservation(${num})">예약</button>
                                                         </div>
                                                     </div>
@@ -133,39 +148,8 @@
 
         function review(num) {
             $.cookie('tutorNum', num);   //리뷰창으로 강사의 번호를 넘김
-            window.location = "/review"
-            // window.open('review', 'review', 'width = 500px, height= 600px, top= 300px, left= 600px')
+            window.open('review', 'review', 'width = 550px, height= 680px, top= 150px, left= 600px')
         }
-
-        function sample() {
-            let url = $('#url2').val()
-            let name = $('#name2').val()
-            let type = $('#type2').val()
-            let location = $('#location2').val()
-            let id = $('#id2').val()
-            let pw = $('#pw2').val()
-            let career = $('#career2').val()
-            let qualification = $('#qualification2').val()
-
-            $.ajax({
-                type: "POST",
-                url: "/sample/go",
-                data: {
-                    url_give: url,
-                    name_give: name,
-                    type_give: type,
-                    location_give: location,
-                    id_give: id,
-                    pw_give: pw,
-                    career_give: career,
-                    qualification_give: qualification
-                },
-                success: function (response) {
-                    alert('msg')
-                }
-            })
-        }
-
 
     </script>
 </head>
@@ -181,10 +165,9 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 
-        <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-                <a class="nav-link  nav-right" onclick="timetables()">수업등록</a>
+        <ul class="navbar-nav ms-auto" id="nav-item">
 
+<<<<<<< HEAD
             </li>
 
             <li class="nav-item">
@@ -196,6 +179,8 @@
             <li class="nav-item">
                 <a class="nav-link nav-right" href="" onclick="logout()">로그아웃</a>
             </li>
+=======
+>>>>>>> 932f8616a3cee69cb46e78d6e83027a8b3ddb9dc
         </ul>
     </div>
 </nav>
@@ -204,34 +189,15 @@
     <div>
         <select class="set" id="type">
             <option selected>운동</option>
-            <option value='체조'>체조</option>
-            <option value='댄스'>댄스</option>
-            <option value='피트니스'>피트니스</option>
-            <option value='이두'>이두</option>
-            <option value='복싱'>복싱</option>
-            <option value='하체'>하체</option>
+            <option value='pt'>피트니스</option>
+            <option value='yoga'>요가</option>
+            <option value='filates'>필라테스</option>
+            <option value='rhb'>재활치료</option>
+            <option value='etc'>기타</option>
         </select>
     </div>
     <div>
-        <select class="set" id="location">
-            <option selected>지역</option>
-            <option value='서울'>서울</option>
-            <option value='부산'>부산</option>
-            <option value='대구'>대구</option>
-            <option value='인천'>인천</option>
-            <option value='광주'>광주</option>
-            <option value='대전'>대전</option>
-            <option value='세종'>세종</option>
-            <option value='경기도'>경기도</option>
-            <option value='강원도'>강원도</option>
-            <option value='충청북도'>충청북도</option>
-            <option value='충청남도'>충청남도</option>
-            <option value='전라북도'>전라북도</option>
-            <option value='전라남도'>전라남도</option>
-            <option value='경상북도'>경상북도</option>
-            <option value='경상남도'>경상남도</option>
-            <option value='제주도'>제주도</option>
-        </select>
+        <input class="set" id="location" placeholder="지역">
     </div>
     <button class="set" onclick="show_tutor()">조회</button>
 </div>

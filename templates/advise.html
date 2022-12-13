@@ -17,6 +17,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+    <script src="/static/js/main.js" defer></script>
 
     <title>💪홈핏 | 상담페이지</title>
 
@@ -28,6 +29,18 @@
     </style>
     <script>
         $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "/getcookie",
+                data: {},
+                success: function (response) {
+                    let user = response['user'];
+                    if (user == null) {
+                        alert('로그인하세요');
+                        document.location = '/'
+                    }
+                }
+            })
             open_list();
             advise_show();
             myadvise_show();
@@ -92,7 +105,7 @@
             $.ajax({
                 type: "POST",
                 url: "advise/show",
-                data: {id_give: id},
+                data: {},
                 success: function (response) {
                     let rows = response['advice']
 
@@ -127,7 +140,8 @@
                 data: {num_give: num},
                 success: function (response) {
                     let comment_id = response['advice'][0]['id']
-                    if (private == 0 || comment_id == 'test1234') {    //내아이디와 comment id를 비교해서 맞으면 참이게 그리고 수정 삭제 버튼
+                    let cookie_id = response['cookie']
+                    if (private == 0 || comment_id == cookie_id) {    //내아이디와 comment id를 비교해서 맞으면 참이게 그리고 수정 삭제 버튼
                         comment_show(num);
                     } else {
                         alert('비공개글입니다')
@@ -145,7 +159,7 @@
 
 <body class="advise-body">
 <nav class="navbar navbar-expand-lg navbar-dark  top-menu">
-    <a class="navbar-brand homefit" href="/">HomeFit</a>
+    <a class="navbar-brand homefit" href="/main">HomeFit</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02"
             aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,7 +167,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
 
-        <ul class="navbar-nav ms-auto">
+        <ul class="navbar-nav ms-auto" id="nav-item">
             <li class="nav-item">
                 <a class="nav-link  nav-right" href="main">강사검색</a>
             </li>
@@ -161,7 +175,7 @@
                 <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link nav-right" href="">로그아웃</a>
+                <a class="nav-link nav-right" href="/logout">로그아웃</a>
             </li>
         </ul>
     </div>

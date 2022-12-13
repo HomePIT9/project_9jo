@@ -201,6 +201,7 @@
     <script>
 
         $(document).ready(function () {
+            show_my_profile()
             var jbOffset = $('.jbMenu').offset();
             $(window).scroll(function () {
                 if ($(document).scrollTop() > jbOffset.top) {
@@ -230,6 +231,26 @@
                 success: function (response) {
                     alert(response['msg'])
                     history.back();
+                }
+            });
+        }
+
+        function show_my_profile() {
+             $.ajax({
+                type: 'GET',
+                url: '/profile/show',
+                data: {},
+                success: function (response) {
+                    let member = response['member'][0]
+                    let name = member['name']
+                    let qualifications = member['qualification']
+                    let career = member['career']
+                    let type = member['type']
+
+                    $('#tutorname').val(name)
+                    $('#qualifications').val(qualifications)
+                    $('#career').val(career)
+                    $('#inputState').val(type)
                 }
             });
         }

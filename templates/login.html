@@ -19,7 +19,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Dongle:wght@400;700&family=Jua&display=swap" rel="stylesheet">
 
-    <title>홈핏</title>
+    <title>💪홈핏 | 내 몸에 맞는 홈트레이닝</title>
 
     <style>
         * {
@@ -92,11 +92,14 @@
                 data: {id_give: $('#id').val(), pw_give: $('#pw').val()},
                 success: function (response) {
                     if (response['result'] === 'success') {
-                        alert('로그인 완료!')
-                        document.cookie = "memberId" + response['member_id'];
+                        document.cookie = "memberId=" + response['member_id'];
+                        document.cookie = "user=" + response['user'];
                         window.location.href = '/main'
 
-                        $.cookie('memberId', response['token']);
+                        //테스트코드
+                        document.cookie = "mytoken=" + response['token'];
+
+                        // $.cookie('mytoken', response['token']);
 
                     } else {
                         alert(response['msg'])

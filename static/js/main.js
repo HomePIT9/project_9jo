@@ -1,12 +1,45 @@
-function reservation(num) {
+$(document).ready(function () {
     $.ajax({
-        type: "POST",
-        url: "/tutors/reservation",
-        data: {'num_give': num},
+                type: "GET",
+                url: "/getcookie",
+                data: {},
+                success: function (response) {
+                    let user = response['user'];
+                    if (user == null) {
+                        alert('로그인하세요');
+                        document.location = '/'
+                    }
+                }
+            })
+
+    show_navbar()
+});
+
+function reservation(num) {
+     $.ajax({
+        type: "GET",
+        url: "/getcookie",
+        data: {},
         success: function (response) {
-            location.href = "/tutors/reservation"
+            let user = response['user'];
+            if (user == 'normal') {
+                $.ajax({
+                    type: "POST",
+                    url: "/tutors/reservation",
+                    data: {'num_give': num},
+                    success: function (response) {
+                        location.href = "/tutors/reservation"
+                    }
+                });
+            } else {
+                alert('일반회원만 이용 가능합니다')
+            }
         }
     })
+
+
+
+
 }
 
 
@@ -55,8 +88,71 @@ function schedule() {
     }
 }
 
+//회원, 강사 구분
+function check_member() {
+    $.ajax({
+        type: "GET",
+        url: "/checkmember",
+        data: {},
+        success: function (response) {
+            let msg = response['msg']
+            document.cookie = "user=" + msg;
+        }
+    })
+}
+
+function show_navbar() {
+    $.ajax({
+        type: "GET",
+        url: "/getcookie",
+        data: {},
+        success: function (response) {
+            $('#nav-item').empty()
+            let user = response['user']
+            if (user == 'normal') {
+                temp_html = `<li class="nav-item">
+                                <a class="nav-link nav-right" href="/main">강사검색</a>
+                            </li>
+                              <li class="nav-item">
+                                <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  nav-right" href="/advise">상담하기</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-right" onclick="logout()">로그아웃</a>
+                            </li>`
+                $('#nav-item').append(temp_html)
+            } else if (user == 'tutor') {
+                temp_html = `
+                              <li class="nav-item">
+                                <a class="nav-link  nav-right" href="reservation/list">예약조회</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  nav-right" onclick="timetables()">수업등록</a>
+                
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link  nav-right" href="/profile"">프로필수정</a>
+                
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-right" onclick="logout()">로그아웃</a>
+                            </li>`
+                $('#nav-item').append(temp_html)
+
+            }
+        }
+    })
+}
+
 function logout() {
-    alert('로그아웃!')
-    $.removeCookie('member');
-    window.location.href = '/'
+     $.ajax({
+        type: "GET",
+        url: "/logout",
+        data: {},
+        success: function (response) {
+            location.href = "/"
+        }
+    });
 }
